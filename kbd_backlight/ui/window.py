@@ -22,6 +22,17 @@ from kbd_backlight.profiles.profile import Profile
 MODE_NAMES = ['Static', 'Breathing', 'Color Cycle', 'Strobe']
 MODE_KEYS  = ['static', 'breathing', 'color_cycle', 'strobe']
 
+PRESETS = [
+    ('Ocean',       0,   100, 255),
+    ('Sunset',    255,    80,  20),
+    ('Cyberpunk',   0,   255, 180),
+    ('Crimson',   200,     0,  50),
+    ('Gold',      255,   180,   0),
+    ('Lilac',     160,    80, 220),
+    ('Glacier',   100,   220, 255),
+    ('Monochrome',220,   220, 220),
+]
+
 
 class MainWindow(Adw.ApplicationWindow):
     """Full-featured keyboard backlight configuration window.
@@ -68,6 +79,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self._build_backlight_controls(content_box)
         self._build_profile_section(content_box)
+        self._build_palette(content_box)
 
     def do_close_request(self):
         """Hide window on close instead of quitting (TRAY-05 prep for Phase 4)."""
@@ -352,3 +364,51 @@ class MainWindow(Adw.ApplicationWindow):
             self._manager.delete_profile(profile_name)
             self._refresh_profile_list()
             self._toast_overlay.add_toast(Adw.Toast.new(f'Deleted "{profile_name}"'))
+
+    # ── Color palette presets ──────────────────────────────────────────────
+
+    def _build_palette(self, parent: Gtk.Box):
+        group = Adw.PreferencesGroup()
+        group.set_title('Color Presets')
+
+        flow = Gtk.FlowBox()
+        flow.set_max_children_per_line(4)
+        flow.set_selection_mode(Gtk.SelectionMode.NONE)
+        flow.set_margin_top(8)
+        flow.set_margin_bottom(8)
+        flow.set_margin_start(8)
+        flow.set_margin_end(8)
+        flow.set_row_spacing(8)
+        flow.set_column_spacing(8)
+
+        for name, r, g, b in PRESETS:
+            btn = Gtk.Button()
+            btn.set_tooltip_text(name)
+            btn.set_size_request(48, 48)
+            btn.add_css_class('circular')
+
+            rgba = Gdk.RGBA()
+            rgba.red, rgba.green, rgba.blue, rgba.alpha = r / 255, g / 255, b / 255, 1.0
+            css = f'button {{ background-color: {rgba.to_string()}; }}'
+            provider = Gtk.CssProvider()
+            provider.load_from_string(css)
+            btn.get_style_context().add_provider(
+                provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            )
+
+            btn.connect('clicked', self._on_preset_clicked, r, g, b)
+            flow.append(btn)
+
+        group.add(flow)
+        parent.append(group)
+
+    def _on_preset_clicked(self, _btn, r: int, g: int, b: int):
+        """Set ColorDialogButton to preset color. notify::rgba fires -> _schedule_preview()."""
+        rgba = Gdk.RGBA()
+        rgba.red   = r / 255.0
+        rgba.green = g / 255.0
+        rgba.blue  = b / 255.0
+        rgba.alpha = 1.0
+        self._color_button.set_rgba(rgba)
+        # notify::rgba fires automatically from set_rgba() -> _schedule_preview() called
+        # No explicit _schedule_preview() needed here — would cause double debounce
