@@ -61,7 +61,12 @@ Plans:
   3. User can set animation speed (slow/medium/fast) for modes that support it
   4. User can apply any of the 6-8 preset color palettes and the keyboard changes immediately
   5. User can load and save profiles from within the main window without opening a terminal
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — GTK4 application scaffold: ui/ package, Application class, main.py entry point
+- [ ] 03-02-PLAN.md — MainWindow: mode/color/speed controls + debounced live preview + profile load/save/delete
+- [ ] 03-03-PLAN.md — Color palette presets (8 swatches) + visual verification checkpoint
 
 ### Phase 4: System Tray and Autostart
 **Goal**: The app lives in the system tray and switches profiles with one click — and launches automatically into tray-only mode on login
@@ -95,6 +100,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Permissions and Hardware Foundation | 1/2 | In Progress|  |
 | 2. Profile Data Layer | 2/2 | Complete   | 2026-02-21 |
-| 3. Main Window and Live Preview | 0/TBD | Not started | - |
+| 3. Main Window and Live Preview | 0/3 | Not started | - |
 | 4. System Tray and Autostart | 0/TBD | Not started | - |
 | 5. Color Tools and Keyboard Shortcuts | 0/TBD | Not started | - |
