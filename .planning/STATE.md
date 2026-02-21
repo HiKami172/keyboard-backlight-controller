@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 3 of 5 (Main Window and Live Preview)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-21 — Plan 03-01 complete: GTK Application scaffold (ui/ package, Application class, main.py)
+Last activity: 2026-02-21 — Plan 03-02 complete: MainWindow with mode/color/speed controls, 100ms debounce, profile dialogs
 
-Progress: [████░░░░░░] 27%
+Progress: [█████░░░░░] 36%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 1.4 min
-- Total execution time: 7 min
+- Total plans completed: 6
+- Average duration: 1.5 min
+- Total execution time: 9 min
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [████░░░░░░] 27%
 |-------|-------|-------|----------|
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 | 02-profile-data-layer | 2 | 3 min | 1.5 min |
-| 03-main-window-and-live-preview | 1 | 1 min | 1 min |
+| 03-main-window-and-live-preview | 2 | 3 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 2 min, 1 min, 2 min, 1 min, 1 min
+- Last 5 plans: 1 min, 2 min, 1 min, 1 min, 2 min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -67,6 +67,11 @@ Recent decisions affecting current work:
 - [03-01]: get_last_profile() returns Profile|None not string — _restore_last_profile uses returned Profile directly
 - [03-01]: MainWindow imported inside _on_activate to prevent circular import at module level
 - [03-01]: show_window() stub created now for Phase 4 tray hook — avoids AttributeError if tray calls early
+- [03-02]: Gtk.ColorDialogButton not Gtk.ColorButton — ColorButton deprecated in GTK 4.10
+- [03-02]: Adw.Dialog+EntryRow for save dialog; Adw.AlertDialog for delete confirmation — Gtk.Dialog deprecated
+- [03-02]: Speed row set_sensitive(False) for Static mode — speed param irrelevant for static
+- [03-02]: _on_speed_changed guards if button.get_active() — toggled fires twice per click (deactivate + activate)
+- [03-02]: _loading guard pattern wraps all programmatic control updates to suppress signal-driven debounce
 
 ### Pending Todos
 
@@ -81,5 +86,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 03-01-PLAN.md — GTK Application scaffold done. ui/ package, Application(Adw.Application), main.py entry point.
+Stopped at: Completed 03-02-PLAN.md — MainWindow with mode/color/speed controls, 100ms debounce, profile load/save/delete dialogs.
 Resume file: None
