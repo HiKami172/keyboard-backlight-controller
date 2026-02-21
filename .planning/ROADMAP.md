@@ -45,7 +45,11 @@ Plans:
   2. User can rename and delete profiles; changes reflect in the JSON file immediately
   3. Profiles are stored as human-readable JSON in ~/.config/kbd-backlight/ — readable and editable by hand
   4. On app launch the last used profile is automatically restored and applied to the keyboard
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Profile dataclass with __post_init__ validation and unit tests (TDD)
+- [ ] 02-02-PLAN.md — ProfileManager CRUD with atomic JSON storage and integration tests (TDD)
 
 ### Phase 3: Main Window and Live Preview
 **Goal**: The user has a full GTK4 window where they can configure any backlight setting and see it applied to the keyboard in real time
