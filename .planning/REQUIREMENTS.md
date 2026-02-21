@@ -9,7 +9,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Permissions
 
-- [ ] **PERM-01**: App sets up udev rule granting user write access to kbd_rgb_mode sysfs file without sudo
+- [x] **PERM-01**: App sets up udev rule granting user write access to kbd_rgb_mode sysfs file without sudo
 - [ ] **PERM-02**: App discovers sysfs path dynamically via glob (`asus::kbd_backlight*`) — not hardcoded
 
 ### Hardware Control
@@ -81,7 +81,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PERM-01 | Phase 1: Permissions and Hardware Foundation | Pending |
+| PERM-01 | Phase 1: Permissions and Hardware Foundation | Complete |
 | PERM-02 | Phase 1: Permissions and Hardware Foundation | Pending |
 | CTRL-01 | Phase 1: Permissions and Hardware Foundation | Pending |
 | CTRL-02 | Phase 1: Permissions and Hardware Foundation | Pending |

@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 1 of 5 (Permissions and Hardware Foundation)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-02-21 — Roadmap created; 23 v1 requirements mapped across 5 phases
+Plan: 1 of TBD in current phase
+Status: In progress
+Last activity: 2026-02-21 — Plan 01 complete: package skeleton + udev rule + install script
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 5%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: -
-- Total execution time: -
+- Total plans completed: 1
+- Average duration: 1 min
+- Total execution time: 1 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-permissions-and-hardware-foundation | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: -
+- Last 5 plans: 1 min
 - Trend: -
 
 *Updated after each plan completion*
@@ -47,6 +47,8 @@ Recent decisions affecting current work:
 - [Init]: Full GTK4 window + AppIndicator3 tray — window for setup, tray for daily switching
 - [Phase 1]: Confirm actual sysfs path with `ls /sys/class/leds/asus*` on hardware before any code
 - [Phase 4]: Validate gi.repository.AppIndicator3 import path on Ubuntu 24.04 before implementing tray
+- [01-01]: plugdev group used (not video) — hikami is in plugdev; video group has no members on this machine
+- [01-01]: KERNEL=="asus::kbd_backlight*" wildcard handles asus::kbd_backlight_1 rename variant (Red Hat BZ #1665505)
 
 ### Pending Todos
 
@@ -61,5 +63,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Roadmap created; all files written. Ready to run /gsd:plan-phase 1.
+Stopped at: Completed 01-01-PLAN.md — package skeleton + udev rule + install script done.
 Resume file: None
