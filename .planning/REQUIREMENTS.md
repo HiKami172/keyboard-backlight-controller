@@ -48,8 +48,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Main Window
 
-- [ ] **WIND-01**: Full standalone GTK4/libadwaita window for all configuration
-- [ ] **WIND-02**: Tray icon click opens/shows the main window
+- [x] **WIND-01**: Full standalone GTK4/libadwaita window for all configuration
+- [x] **WIND-02**: Tray icon click opens/shows the main window
 
 ## v2 Requirements
 
@@ -92,8 +92,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROF-02 | Phase 2: Profile Data Layer | Complete |
 | PROF-03 | Phase 2: Profile Data Layer | Complete |
 | PROF-04 | Phase 2: Profile Data Layer | Complete |
-| WIND-01 | Phase 3: Main Window and Live Preview | Pending |
-| WIND-02 | Phase 3: Main Window and Live Preview | Pending |
+| WIND-01 | Phase 3: Main Window and Live Preview | Complete |
+| WIND-02 | Phase 3: Main Window and Live Preview | Complete |
 | COLR-01 | Phase 3: Main Window and Live Preview | Pending |
 | TRAY-01 | Phase 4: System Tray and Autostart | Pending |
 | TRAY-02 | Phase 4: System Tray and Autostart | Pending |

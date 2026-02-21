@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** User can visually configure and switch keyboard backlight modes without touching the terminal — and the setting persists across reboots.
-**Current focus:** Phase 2 — Profile Data Layer
+**Current focus:** Phase 3 — Main Window and Live Preview
 
 ## Current Position
 
-Phase: 2 of 5 (Profile Data Layer)
-Plan: 2 of 2 in current phase (phase complete)
+Phase: 3 of 5 (Main Window and Live Preview)
+Plan: 1 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-21 — Plan 02 complete: ProfileManager with atomic JSON CRUD + 29-test integration suite
+Last activity: 2026-02-21 — Plan 03-01 complete: GTK Application scaffold (ui/ package, Application class, main.py)
 
-Progress: [████░░░░░░] 20%
+Progress: [████░░░░░░] 27%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 1.75 min
-- Total execution time: 6 min
+- Total plans completed: 5
+- Average duration: 1.4 min
+- Total execution time: 7 min
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [████░░░░░░] 20%
 |-------|-------|-------|----------|
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 | 02-profile-data-layer | 2 | 3 min | 1.5 min |
+| 03-main-window-and-live-preview | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min, 1 min, 2 min
-- Trend: -
+- Last 5 plans: 2 min, 1 min, 2 min, 1 min, 1 min
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -61,6 +62,11 @@ Recent decisions affecting current work:
 - [Phase 02-02]: _load() never caches (no self._data) — reads disk on every call to prevent stale state with multiple instances
 - [Phase 02-02]: _dict_to_profile() silently filters unknown JSON keys via dataclasses.fields() — hand-edited profiles.json cannot crash
 - [Phase 02-02]: get_all_profiles() added as single-_load() convenience for Phase 3/4 bulk profile iteration
+- [03-01]: APPLICATION_ID = io.github.hikami.KbdBacklight (reverse-DNS, GTK convention)
+- [03-01]: Controller init deferred to _on_activate — HardwareNotFoundError shows Adw.AlertDialog not a crash
+- [03-01]: get_last_profile() returns Profile|None not string — _restore_last_profile uses returned Profile directly
+- [03-01]: MainWindow imported inside _on_activate to prevent circular import at module level
+- [03-01]: show_window() stub created now for Phase 4 tray hook — avoids AttributeError if tray calls early
 
 ### Pending Todos
 
@@ -75,5 +81,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 02-02-PLAN.md — ProfileManager with atomic JSON CRUD + 29-test integration suite done. Phase 2 complete.
+Stopped at: Completed 03-01-PLAN.md — GTK Application scaffold done. ui/ package, Application(Adw.Application), main.py entry point.
 Resume file: None
