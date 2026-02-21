@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 2 of 5 (Profile Data Layer)
-Plan: 1 of 2 in current phase
+Plan: 2 of 2 in current phase (phase complete)
 Status: In progress
-Last activity: 2026-02-21 — Plan 01 complete: Profile dataclass + 29-test TDD suite
+Last activity: 2026-02-21 — Plan 02 complete: ProfileManager with atomic JSON CRUD + 29-test integration suite
 
-Progress: [███░░░░░░░] 15%
+Progress: [████░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 1.7 min
-- Total execution time: 4 min
+- Total plans completed: 4
+- Average duration: 1.75 min
+- Total execution time: 6 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
-| 02-profile-data-layer | 1 | 1 min | 1 min |
+| 02-profile-data-layer | 2 | 3 min | 1.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min, 1 min
+- Last 5 plans: 1 min, 2 min, 1 min, 2 min
 - Trend: -
 
 *Updated after each plan completion*
@@ -57,6 +57,10 @@ Recent decisions affecting current work:
 - [02-01]: VALID_MODES as ClassVar[set[str]] on @dataclass — Python stdlib excludes ClassVar from asdict() automatically
 - [02-01]: Intentional validation duplication vs BacklightController — Profile must be hardware-independent
 - [02-01]: ProfileManager NOT imported in __init__.py in Plan 01 — deferred to Plan 02 to avoid forward-ref errors
+- [Phase 02-02]: Atomic write via tmp.replace(profiles_path) — prevents partial-write corruption on process kill
+- [Phase 02-02]: _load() never caches (no self._data) — reads disk on every call to prevent stale state with multiple instances
+- [Phase 02-02]: _dict_to_profile() silently filters unknown JSON keys via dataclasses.fields() — hand-edited profiles.json cannot crash
+- [Phase 02-02]: get_all_profiles() added as single-_load() convenience for Phase 3/4 bulk profile iteration
 
 ### Pending Todos
 
@@ -71,5 +75,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 02-01-PLAN.md — Profile dataclass + 29-test TDD suite done.
+Stopped at: Completed 02-02-PLAN.md — ProfileManager with atomic JSON CRUD + 29-test integration suite done. Phase 2 complete.
 Resume file: None
