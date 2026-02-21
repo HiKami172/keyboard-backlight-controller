@@ -81,29 +81,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PERM-01 | Phase 1 | Pending |
-| PERM-02 | Phase 1 | Pending |
-| CTRL-01 | Phase 1 | Pending |
-| CTRL-02 | Phase 1 | Pending |
-| CTRL-03 | Phase 1 | Pending |
-| CTRL-04 | Phase 1 | Pending |
-| CTRL-05 | Phase 1 | Pending |
-| PROF-01 | Phase 2 | Pending |
-| PROF-02 | Phase 2 | Pending |
-| PROF-03 | Phase 2 | Pending |
-| PROF-04 | Phase 2 | Pending |
-| WIND-01 | Phase 3 | Pending |
-| WIND-02 | Phase 3 | Pending |
-| COLR-01 | Phase 3 | Pending |
-| COLR-02 | Phase 3 | Pending |
-| COLR-03 | Phase 3 | Pending |
-| TRAY-01 | Phase 4 | Pending |
-| TRAY-02 | Phase 4 | Pending |
-| TRAY-03 | Phase 4 | Pending |
-| TRAY-04 | Phase 4 | Pending |
-| TRAY-05 | Phase 4 | Pending |
-| KEYS-01 | Phase 5 | Pending |
-| KEYS-02 | Phase 5 | Pending |
+| PERM-01 | Phase 1: Permissions and Hardware Foundation | Pending |
+| PERM-02 | Phase 1: Permissions and Hardware Foundation | Pending |
+| CTRL-01 | Phase 1: Permissions and Hardware Foundation | Pending |
+| CTRL-02 | Phase 1: Permissions and Hardware Foundation | Pending |
+| CTRL-03 | Phase 1: Permissions and Hardware Foundation | Pending |
+| CTRL-04 | Phase 1: Permissions and Hardware Foundation | Pending |
+| CTRL-05 | Phase 1: Permissions and Hardware Foundation | Pending |
+| PROF-01 | Phase 2: Profile Data Layer | Pending |
+| PROF-02 | Phase 2: Profile Data Layer | Pending |
+| PROF-03 | Phase 2: Profile Data Layer | Pending |
+| PROF-04 | Phase 2: Profile Data Layer | Pending |
+| WIND-01 | Phase 3: Main Window and Live Preview | Pending |
+| WIND-02 | Phase 3: Main Window and Live Preview | Pending |
+| COLR-01 | Phase 3: Main Window and Live Preview | Pending |
+| TRAY-01 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-02 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-03 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-04 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-05 | Phase 4: System Tray and Autostart | Pending |
+| COLR-02 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
+| COLR-03 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
+| KEYS-01 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
+| KEYS-02 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
 
 **Coverage:**
 - v1 requirements: 23 total
@@ -112,4 +112,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-21*
-*Last updated: 2026-02-21 after initial definition*
+*Last updated: 2026-02-21 after roadmap creation — traceability phase names added*

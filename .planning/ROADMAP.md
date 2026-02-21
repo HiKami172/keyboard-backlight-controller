@@ -1,0 +1,92 @@
+# Roadmap: ASUS TUF F16 Keyboard Backlight Controller
+
+## Overview
+
+Five phases build bottom-up from hardware access to daily-use polish. Phase 1 solves the foundational blocker (sysfs permissions + validated hardware writes) before any GUI exists. Phase 2 builds the profile data layer in pure Python so both the window and tray can share it. Phase 3 wires the main window with live preview — the core UX differentiator. Phase 4 adds the system tray and autostart, completing the background-daemon behavior. Phase 5 adds the color tools (palettes, harmony, gradient) and keyboard shortcuts that make the tool pleasant rather than merely functional.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [ ] **Phase 1: Permissions and Hardware Foundation** - udev rule + BacklightController with glob path discovery and validated sysfs writes
+- [ ] **Phase 2: Profile Data Layer** - Profile dataclass, ProfileManager CRUD, and JSON storage — no GTK dependency
+- [ ] **Phase 3: Main Window and Live Preview** - GTK4/libadwaita window with mode selector, color picker, speed control, and debounced live preview
+- [ ] **Phase 4: System Tray and Autostart** - AppIndicator3 tray with profile menu, XDG autostart, and tray-only launch mode
+- [ ] **Phase 5: Color Tools and Keyboard Shortcuts** - Preset palettes, color harmony suggestions, gradient selector, and Wayland-compatible profile shortcuts
+
+## Phase Details
+
+### Phase 1: Permissions and Hardware Foundation
+**Goal**: The user can write any valid backlight command to the hardware without a password prompt, and the app can discover the sysfs path dynamically
+**Depends on**: Nothing (first phase)
+**Requirements**: PERM-01, PERM-02, CTRL-01, CTRL-02, CTRL-03, CTRL-04, CTRL-05
+**Success Criteria** (what must be TRUE):
+  1. User can run the app without sudo — writes to kbd_rgb_mode succeed without a password dialog
+  2. App discovers the sysfs path via glob at startup and fails fast with a readable error if the path is missing (not a Python traceback)
+  3. All 4 hardware modes (static, breathing, color cycle, strobe) can be commanded from the app with any valid RGB color and speed
+  4. Live preview writes use cmd=0 (temporary); explicit save uses cmd=1 (persist to BIOS) — never cmd=1 during slider drag
+  5. BacklightController can be tested with a mock sysfs path (no hardware required for development)
+**Plans**: TBD
+
+### Phase 2: Profile Data Layer
+**Goal**: Named profiles can be created, saved, loaded, and deleted as JSON on disk — with no GUI or hardware dependency
+**Depends on**: Phase 1
+**Requirements**: PROF-01, PROF-02, PROF-03, PROF-04
+**Success Criteria** (what must be TRUE):
+  1. User can create a named profile with mode, color, and speed settings and it persists to disk
+  2. User can rename and delete profiles; changes reflect in the JSON file immediately
+  3. Profiles are stored as human-readable JSON in ~/.config/kbd-backlight/ — readable and editable by hand
+  4. On app launch the last used profile is automatically restored and applied to the keyboard
+**Plans**: TBD
+
+### Phase 3: Main Window and Live Preview
+**Goal**: The user has a full GTK4 window where they can configure any backlight setting and see it applied to the keyboard in real time
+**Depends on**: Phase 2
+**Requirements**: WIND-01, WIND-02, COLR-01
+**Success Criteria** (what must be TRUE):
+  1. User can open a standalone window and select any of the 4 hardware modes from a control in the window
+  2. User can pick any RGB color via the GTK4 color picker dialog and it applies to the keyboard within ~100ms
+  3. User can set animation speed (slow/medium/fast) for modes that support it
+  4. User can apply any of the 6-8 preset color palettes and the keyboard changes immediately
+  5. User can load and save profiles from within the main window without opening a terminal
+**Plans**: TBD
+
+### Phase 4: System Tray and Autostart
+**Goal**: The app lives in the system tray and switches profiles with one click — and launches automatically into tray-only mode on login
+**Depends on**: Phase 3
+**Requirements**: TRAY-01, TRAY-02, TRAY-03, TRAY-04, TRAY-05
+**Success Criteria** (what must be TRUE):
+  1. A system tray icon appears in GNOME; right-clicking it shows a menu listing all saved profiles
+  2. User can switch profiles from the tray menu with one click and the keyboard changes immediately
+  3. Each profile entry in the tray menu shows a color swatch for visual identification
+  4. App launches automatically on login in tray-only mode (no window opened) via XDG autostart
+  5. Closing the main window hides it to the tray rather than quitting the app; clicking the tray icon restores it
+**Plans**: TBD
+
+### Phase 5: Color Tools and Keyboard Shortcuts
+**Goal**: The color-picking experience is enhanced with harmony suggestions and gradient selection, and profiles are switchable via keyboard shortcuts
+**Depends on**: Phase 4
+**Requirements**: COLR-02, COLR-03, KEYS-01, KEYS-02
+**Success Criteria** (what must be TRUE):
+  1. When the user picks a color, the app displays complementary, analogous, and triadic harmony swatches that can be applied with one click
+  2. User can pick two colors and select any gradient midpoint between them as the keyboard color
+  3. User can switch between saved profiles using a keyboard shortcut without opening the app window
+  4. Keyboard shortcut switching works on Wayland (does not rely on X11 keygrabbing)
+**Plans**: TBD
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Permissions and Hardware Foundation | 0/TBD | Not started | - |
+| 2. Profile Data Layer | 0/TBD | Not started | - |
+| 3. Main Window and Live Preview | 0/TBD | Not started | - |
+| 4. System Tray and Autostart | 0/TBD | Not started | - |
+| 5. Color Tools and Keyboard Shortcuts | 0/TBD | Not started | - |
