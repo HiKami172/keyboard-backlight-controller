@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** User can visually configure and switch keyboard backlight modes without touching the terminal — and the setting persists across reboots.
-**Current focus:** Phase 1 — Permissions and Hardware Foundation
+**Current focus:** Phase 2 — Profile Data Layer
 
 ## Current Position
 
-Phase: 1 of 5 (Permissions and Hardware Foundation)
-Plan: 2 of TBD in current phase
+Phase: 2 of 5 (Profile Data Layer)
+Plan: 1 of 2 in current phase
 Status: In progress
-Last activity: 2026-02-21 — Plan 02 complete: BacklightController implementation + 14-test unit suite
+Last activity: 2026-02-21 — Plan 01 complete: Profile dataclass + 29-test TDD suite
 
-Progress: [██░░░░░░░░] 10%
+Progress: [███░░░░░░░] 15%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 2 min
-- Total execution time: 3 min
+- Total plans completed: 3
+- Average duration: 1.7 min
+- Total execution time: 4 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
+| 02-profile-data-layer | 1 | 1 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min
+- Last 5 plans: 1 min, 2 min, 1 min
 - Trend: -
 
 *Updated after each plan completion*
@@ -52,6 +53,10 @@ Recent decisions affecting current work:
 - [01-02]: No hardcoded sysfs path in production code — SYSFS_GLOB + pathlib glob at init time
 - [01-02]: persist=False default (cmd=0) — callers must opt in to firmware save; prevents accidental firmware writes during live preview
 - [01-02]: strobe mode (3) included despite open hardware question — hardware test deferred to Phase 1 live verification
+- [02-01]: ProfileError subclasses ValueError so callers can catch either type
+- [02-01]: VALID_MODES as ClassVar[set[str]] on @dataclass — Python stdlib excludes ClassVar from asdict() automatically
+- [02-01]: Intentional validation duplication vs BacklightController — Profile must be hardware-independent
+- [02-01]: ProfileManager NOT imported in __init__.py in Plan 01 — deferred to Plan 02 to avoid forward-ref errors
 
 ### Pending Todos
 
@@ -66,5 +71,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 01-02-PLAN.md — BacklightController implementation + 14-test unit suite done.
+Stopped at: Completed 02-01-PLAN.md — Profile dataclass + 29-test TDD suite done.
 Resume file: None
