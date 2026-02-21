@@ -30,7 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. All 4 hardware modes (static, breathing, color cycle, strobe) can be commanded from the app with any valid RGB color and speed
   4. Live preview writes use cmd=0 (temporary); explicit save uses cmd=1 (persist to BIOS) — never cmd=1 during slider drag
   5. BacklightController can be tested with a mock sysfs path (no hardware required for development)
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Project skeleton + udev rule + install script
+- [ ] 01-02-PLAN.md — BacklightController implementation + unit tests
 
 ### Phase 2: Profile Data Layer
 **Goal**: Named profiles can be created, saved, loaded, and deleted as JSON on disk — with no GUI or hardware dependency
@@ -85,7 +89,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Permissions and Hardware Foundation | 0/TBD | Not started | - |
+| 1. Permissions and Hardware Foundation | 0/2 | Not started | - |
 | 2. Profile Data Layer | 0/TBD | Not started | - |
 | 3. Main Window and Live Preview | 0/TBD | Not started | - |
 | 4. System Tray and Autostart | 0/TBD | Not started | - |
