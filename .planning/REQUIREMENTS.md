@@ -10,15 +10,15 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Permissions
 
 - [x] **PERM-01**: App sets up udev rule granting user write access to kbd_rgb_mode sysfs file without sudo
-- [ ] **PERM-02**: App discovers sysfs path dynamically via glob (`asus::kbd_backlight*`) — not hardcoded
+- [x] **PERM-02**: App discovers sysfs path dynamically via glob (`asus::kbd_backlight*`) — not hardcoded
 
 ### Hardware Control
 
-- [ ] **CTRL-01**: User can select any of the 4 hardware modes (static, breathing, color cycle, strobe)
-- [ ] **CTRL-02**: User can pick any RGB color via color picker dialog
-- [ ] **CTRL-03**: User can set animation speed (slow, medium, fast) for breathing/cycle/strobe modes
-- [ ] **CTRL-04**: Changes apply to keyboard in real-time as user adjusts controls (debounced ~100ms live preview)
-- [ ] **CTRL-05**: Live preview uses cmd=0 (temporary); explicit save uses cmd=1 (persist to BIOS)
+- [x] **CTRL-01**: User can select any of the 4 hardware modes (static, breathing, color cycle, strobe)
+- [x] **CTRL-02**: User can pick any RGB color via color picker dialog
+- [x] **CTRL-03**: User can set animation speed (slow, medium, fast) for breathing/cycle/strobe modes
+- [x] **CTRL-04**: Changes apply to keyboard in real-time as user adjusts controls (debounced ~100ms live preview)
+- [x] **CTRL-05**: Live preview uses cmd=0 (temporary); explicit save uses cmd=1 (persist to BIOS)
 
 ### Profiles
 
@@ -82,12 +82,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PERM-01 | Phase 1: Permissions and Hardware Foundation | Complete |
-| PERM-02 | Phase 1: Permissions and Hardware Foundation | Pending |
-| CTRL-01 | Phase 1: Permissions and Hardware Foundation | Pending |
-| CTRL-02 | Phase 1: Permissions and Hardware Foundation | Pending |
-| CTRL-03 | Phase 1: Permissions and Hardware Foundation | Pending |
-| CTRL-04 | Phase 1: Permissions and Hardware Foundation | Pending |
-| CTRL-05 | Phase 1: Permissions and Hardware Foundation | Pending |
+| PERM-02 | Phase 1: Permissions and Hardware Foundation | Complete |
+| CTRL-01 | Phase 1: Permissions and Hardware Foundation | Complete |
+| CTRL-02 | Phase 1: Permissions and Hardware Foundation | Complete |
+| CTRL-03 | Phase 1: Permissions and Hardware Foundation | Complete |
+| CTRL-04 | Phase 1: Permissions and Hardware Foundation | Complete |
+| CTRL-05 | Phase 1: Permissions and Hardware Foundation | Complete |
 | PROF-01 | Phase 2: Profile Data Layer | Pending |
 | PROF-02 | Phase 2: Profile Data Layer | Pending |
 | PROF-03 | Phase 2: Profile Data Layer | Pending |

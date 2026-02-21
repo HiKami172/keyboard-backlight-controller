@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 1 of 5 (Permissions and Hardware Foundation)
-Plan: 1 of TBD in current phase
+Plan: 2 of TBD in current phase
 Status: In progress
-Last activity: 2026-02-21 — Plan 01 complete: package skeleton + udev rule + install script
+Last activity: 2026-02-21 — Plan 02 complete: BacklightController implementation + 14-test unit suite
 
-Progress: [█░░░░░░░░░] 5%
+Progress: [██░░░░░░░░] 10%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 1 min
-- Total execution time: 1 min
+- Total plans completed: 2
+- Average duration: 2 min
+- Total execution time: 3 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-permissions-and-hardware-foundation | 1 | 1 min | 1 min |
+| 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min
+- Last 5 plans: 1 min, 2 min
 - Trend: -
 
 *Updated after each plan completion*
@@ -49,6 +49,9 @@ Recent decisions affecting current work:
 - [Phase 4]: Validate gi.repository.AppIndicator3 import path on Ubuntu 24.04 before implementing tray
 - [01-01]: plugdev group used (not video) — hikami is in plugdev; video group has no members on this machine
 - [01-01]: KERNEL=="asus::kbd_backlight*" wildcard handles asus::kbd_backlight_1 rename variant (Red Hat BZ #1665505)
+- [01-02]: No hardcoded sysfs path in production code — SYSFS_GLOB + pathlib glob at init time
+- [01-02]: persist=False default (cmd=0) — callers must opt in to firmware save; prevents accidental firmware writes during live preview
+- [01-02]: strobe mode (3) included despite open hardware question — hardware test deferred to Phase 1 live verification
 
 ### Pending Todos
 
@@ -63,5 +66,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed 01-01-PLAN.md — package skeleton + udev rule + install script done.
+Stopped at: Completed 01-02-PLAN.md — BacklightController implementation + 14-test unit suite done.
 Resume file: None
