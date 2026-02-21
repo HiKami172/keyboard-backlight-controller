@@ -1,0 +1,6 @@
+# Grant plugdev group write access to ASUS TUF keyboard RGB mode control.
+# Uses RUN+chgrp/chmod (not GROUP=/MODE=) — required for sysfs attribute files.
+# User must be a member of the plugdev group (Ubuntu default for hardware access).
+ACTION=="add", SUBSYSTEM=="leds", KERNEL=="asus::kbd_backlight*", \
+  RUN+="/bin/chgrp plugdev /sys/class/leds/%k/kbd_rgb_mode", \
+  RUN+="/bin/chmod g+w /sys/class/leds/%k/kbd_rgb_mode"
