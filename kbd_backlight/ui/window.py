@@ -103,21 +103,22 @@ class MainWindow(Adw.ApplicationWindow):
         group.add(self._mode_row)
 
         # Color picker (Gtk.ColorDialogButton — NOT deprecated ColorButton)
-        color_row = Adw.ActionRow()
-        color_row.set_title('Color')
+        self._color_row = Adw.ActionRow()
+        self._color_row.set_title('Color')
         color_dialog = Gtk.ColorDialog.new()
         color_dialog.set_title('Pick keyboard color')
         color_dialog.set_with_alpha(False)
         self._color_button = Gtk.ColorDialogButton.new(color_dialog)
         self._color_button.set_valign(Gtk.Align.CENTER)
+        self._color_button.set_size_request(40, 40)
         # Default: white (255, 255, 255)
         default_rgba = Gdk.RGBA()
         default_rgba.red = default_rgba.green = default_rgba.blue = 1.0
         default_rgba.alpha = 1.0
         self._color_button.set_rgba(default_rgba)
         self._color_button.connect('notify::rgba', self._on_color_changed)
-        color_row.add_suffix(self._color_button)
-        group.add(color_row)
+        self._color_row.add_suffix(self._color_button)
+        group.add(self._color_row)
 
         # Speed selector (Gtk.ToggleButton group with 'linked' CSS class)
         speed_row = Adw.ActionRow()
@@ -141,9 +142,16 @@ class MainWindow(Adw.ApplicationWindow):
         parent.append(group)
 
     def _on_mode_changed(self, row, _pspec):
-        # Update speed row sensitivity: speed is irrelevant for Static mode
-        is_static = MODE_KEYS[row.get_selected()] == 'static'
-        self._speed_row.set_sensitive(not is_static)
+        mode = MODE_KEYS[row.get_selected()]
+        # Speed is irrelevant for Static mode
+        self._speed_row.set_sensitive(mode != 'static')
+        # Color Cycle mode: hardware cycles all colors automatically — no per-color control
+        is_color_cycle = mode == 'color_cycle'
+        self._color_row.set_sensitive(not is_color_cycle)
+        if is_color_cycle:
+            self._color_row.set_subtitle('Hardware cycles all colors automatically')
+        else:
+            self._color_row.set_subtitle('')
         self._schedule_preview()
 
     def _on_color_changed(self, _button, _pspec):
