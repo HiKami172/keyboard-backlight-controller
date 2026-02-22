@@ -106,5 +106,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Permissions and Hardware Foundation | 1/2 | In Progress|  |
 | 2. Profile Data Layer | 2/2 | Complete   | 2026-02-21 |
 | 3. Main Window and Live Preview | 3/3 | Complete   | 2026-02-22 |
-| 4. System Tray and Autostart | 0/TBD | Not started | - |
+| 4. System Tray and Autostart | 2/3 | In Progress|  |
 | 5. Color Tools and Keyboard Shortcuts | 0/TBD | Not started | - |

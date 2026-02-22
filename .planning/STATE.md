@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 3 of 5 (Main Window and Live Preview) — COMPLETE
-Plan: 3 of 3 in current phase
-Status: Phase 3 complete — ready for Phase 4
-Last activity: 2026-02-22 — Plan 03-03 complete: color palette presets, ColorDialogButton fix, Color Cycle mode UX
+Phase: 4 of 5 (System Tray and Autostart)
+Plan: 1 of 3 in current phase
+Status: In progress — Plan 04-01 complete
+Last activity: 2026-02-22 — Plan 04-01 complete: GTK3 tray subprocess (tray.py) with AyatanaAppIndicator3, profile menu, color swatches, JSON IPC
 
-Progress: [██████░░░░] 48%
+Progress: [████████░░] 62%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Average duration: 1.5 min
-- Total execution time: 9 min
+- Total plans completed: 8
+- Average duration: 1.4 min
+- Total execution time: 11 min
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [██████░░░░] 48%
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 | 02-profile-data-layer | 2 | 3 min | 1.5 min |
 | 03-main-window-and-live-preview | 3 | 23 min | 7.7 min |
+| 04-system-tray-and-autostart | 2 | 2 min | 1 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min, 1 min, 1 min, 20 min
-- Trend: stable (20min plan included user verification round-trip)
+- Last 5 plans: 2 min, 1 min, 1 min, 20 min, 2 min (04-02: 2 min)
+- Trend: stable
 
 *Updated after each plan completion*
 
@@ -75,6 +76,16 @@ Recent decisions affecting current work:
 - [Phase 03-03]: color_cycle mode disables color picker — ASUS hardware ignores RGB values; no per-color cycle control via sysfs
 - [Phase 03-03]: self._color_row as instance variable enables mode-change handler to update sensitivity and subtitle
 - [Phase 03-03]: set_size_request(40,40) on ColorDialogButton required for reliable GTK4 rendering in Adw.ActionRow suffix
+- [04-01]: GTK3/GTK4 subprocess isolation — AyatanaAppIndicator3 hard-links libgtk-3.so.0; tray.py is a separate process that never imports GTK4
+- [04-01]: self._menu stored as instance variable in TrayProcess to prevent GLib garbage collection of Gtk.Menu
+- [04-01]: Gray swatch (128,128,128) for color_cycle profiles (r=g=b=0) — black swatch would be invisible against dark tray backgrounds
+- [04-01]: GLib.io_add_watch _on_stdin returns False only on QUIT (deregisters watch); True for all other commands
+- [04-01]: flush=True on all print() calls mandatory — pipe IPC requires unbuffered stdout for parent to receive messages
+- [04-02]: self.hold() called exactly once on first activate — prevents GLib main loop exit when window hides
+- [04-02]: _activated_once guard distinguishes first-run (apply tray-only logic) from re-activation (always show window)
+- [04-02]: _tray_only flag suppresses window on first activate only — re-activation ignores it
+- [04-02]: read_line_async requeued at end of _on_tray_message — caller must requeue or IPC stops after first message
+- [04-02]: release() called before quit() in quit action handler — balances the hold() from first activate
 
 ### Pending Todos
 
@@ -89,5 +100,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-22
-Stopped at: Completed 03-03-PLAN.md — Phase 3 complete. Color palette presets, ColorDialogButton fix, Color Cycle mode hardware explanation UX.
+Stopped at: Completed 04-02-PLAN.md — Application tray IPC wiring: Gio.SubprocessLauncher, async IPC, app.hold() background persistence, tray-window bidirectional sync.
 Resume file: None

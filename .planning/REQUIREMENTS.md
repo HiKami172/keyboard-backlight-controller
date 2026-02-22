@@ -29,11 +29,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### System Integration
 
-- [ ] **TRAY-01**: System tray icon appears with right-click menu listing all profiles
-- [ ] **TRAY-02**: User can switch profiles from tray menu with one click
-- [ ] **TRAY-03**: Each profile shows a color swatch in the tray menu
+- [x] **TRAY-01**: System tray icon appears with right-click menu listing all profiles
+- [x] **TRAY-02**: User can switch profiles from tray menu with one click
+- [x] **TRAY-03**: Each profile shows a color swatch in the tray menu
 - [ ] **TRAY-04**: App launches into tray-only mode on login via XDG autostart .desktop file
-- [ ] **TRAY-05**: Closing the main window hides to tray instead of quitting
+- [x] **TRAY-05**: Closing the main window hides to tray instead of quitting
 
 ### Color Tools
 
@@ -95,11 +95,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WIND-01 | Phase 3: Main Window and Live Preview | Complete |
 | WIND-02 | Phase 3: Main Window and Live Preview | Complete |
 | COLR-01 | Phase 3: Main Window and Live Preview | Complete |
-| TRAY-01 | Phase 4: System Tray and Autostart | Pending |
-| TRAY-02 | Phase 4: System Tray and Autostart | Pending |
-| TRAY-03 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-01 | Phase 4: System Tray and Autostart | Complete |
+| TRAY-02 | Phase 4: System Tray and Autostart | Complete |
+| TRAY-03 | Phase 4: System Tray and Autostart | Complete |
 | TRAY-04 | Phase 4: System Tray and Autostart | Pending |
-| TRAY-05 | Phase 4: System Tray and Autostart | Pending |
+| TRAY-05 | Phase 4: System Tray and Autostart | Complete |
 | COLR-02 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
 | COLR-03 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
 | KEYS-01 | Phase 5: Color Tools and Keyboard Shortcuts | Pending |
