@@ -333,6 +333,7 @@ class MainWindow(Adw.ApplicationWindow):
         self._manager.save_profile(profile)
         self._manager.set_last_profile(name)
         self._refresh_profile_list()
+        self.get_application().notify_tray_refresh()
         try:
             self._controller.apply(
                 profile.mode, profile.r, profile.g, profile.b,
@@ -371,7 +372,25 @@ class MainWindow(Adw.ApplicationWindow):
         if response == 'delete':
             self._manager.delete_profile(profile_name)
             self._refresh_profile_list()
+            self.get_application().notify_tray_refresh()
             self._toast_overlay.add_toast(Adw.Toast.new(f'Deleted "{profile_name}"'))
+
+    def load_profile_from_tray(self, profile: Profile):
+        """Update UI controls to reflect profile selected from tray menu.
+
+        Uses _loading guard to prevent the control changes from triggering
+        a live preview write (hardware already applied by Application).
+        """
+        self._load_profile_into_controls(profile)
+        # Refresh profile dropdown selection to highlight the loaded profile
+        names = self._manager.list_profiles()
+        if profile.name in names:
+            idx = names.index(profile.name)
+            self._loading = True
+            try:
+                self._profile_row.set_selected(idx)
+            finally:
+                self._loading = False
 
     # ── Color palette presets ──────────────────────────────────────────────
 
