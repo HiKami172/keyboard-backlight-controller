@@ -78,7 +78,12 @@ Plans:
   3. Each profile entry in the tray menu shows a color swatch for visual identification
   4. App launches automatically on login in tray-only mode (no window opened) via XDG autostart
   5. Closing the main window hides it to the tray rather than quitting the app; clicking the tray icon restores it
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — GTK3 tray subprocess (tray.py): AyatanaAppIndicator3 indicator, profile menu with color swatches, stdin/stdout JSON IPC
+- [ ] 04-02-PLAN.md — Application IPC wiring: tray subprocess launch, hold(), _apply_profile_by_name(), notify_tray_refresh(); MainWindow save/delete hooks + load_profile_from_tray()
+- [ ] 04-03-PLAN.md — XDG autostart install script + end-to-end visual verification checkpoint
 
 ### Phase 5: Color Tools and Keyboard Shortcuts
 **Goal**: The color-picking experience is enhanced with harmony suggestions and gradient selection, and profiles are switchable via keyboard shortcuts
