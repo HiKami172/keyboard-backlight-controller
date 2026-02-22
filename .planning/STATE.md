@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 ## Current Position
 
 Phase: 4 of 5 (System Tray and Autostart)
-Plan: 1 of 3 in current phase
-Status: In progress — Plan 04-01 complete
-Last activity: 2026-02-22 — Plan 04-01 complete: GTK3 tray subprocess (tray.py) with AyatanaAppIndicator3, profile menu, color swatches, JSON IPC
+Plan: 2 of 3 in current phase
+Status: In progress — Plan 04-02 complete
+Last activity: 2026-02-22 — Plan 04-02 complete: Gio.SubprocessLauncher async IPC wiring, app.hold() background persistence, tray-window bidirectional sync
 
 Progress: [████████░░] 62%
 
