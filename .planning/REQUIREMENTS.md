@@ -37,7 +37,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Color Tools
 
-- [ ] **COLR-01**: User can apply preset color palettes (6-8 named themes: Ocean, Sunset, Cyberpunk, etc.)
+- [x] **COLR-01**: User can apply preset color palettes (6-8 named themes: Ocean, Sunset, Cyberpunk, etc.)
 - [ ] **COLR-02**: When user picks a color, app suggests complementary, analogous, and triadic harmony colors
 - [ ] **COLR-03**: User can pick two colors and select a gradient midpoint as the keyboard color
 
@@ -94,7 +94,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PROF-04 | Phase 2: Profile Data Layer | Complete |
 | WIND-01 | Phase 3: Main Window and Live Preview | Complete |
 | WIND-02 | Phase 3: Main Window and Live Preview | Complete |
-| COLR-01 | Phase 3: Main Window and Live Preview | Pending |
+| COLR-01 | Phase 3: Main Window and Live Preview | Complete |
 | TRAY-01 | Phase 4: System Tray and Autostart | Pending |
 | TRAY-02 | Phase 4: System Tray and Autostart | Pending |
 | TRAY-03 | Phase 4: System Tray and Autostart | Pending |

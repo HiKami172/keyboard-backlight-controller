@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** User can visually configure and switch keyboard backlight modes without touching the terminal — and the setting persists across reboots.
-**Current focus:** Phase 3 — Main Window and Live Preview
+**Current focus:** Phase 4 — Tray Icon and Background Operation
 
 ## Current Position
 
-Phase: 3 of 5 (Main Window and Live Preview)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-21 — Plan 03-02 complete: MainWindow with mode/color/speed controls, 100ms debounce, profile dialogs
+Phase: 3 of 5 (Main Window and Live Preview) — COMPLETE
+Plan: 3 of 3 in current phase
+Status: Phase 3 complete — ready for Phase 4
+Last activity: 2026-02-22 — Plan 03-03 complete: color palette presets, ColorDialogButton fix, Color Cycle mode UX
 
-Progress: [█████░░░░░] 36%
+Progress: [██████░░░░] 48%
 
 ## Performance Metrics
 
@@ -29,11 +29,11 @@ Progress: [█████░░░░░] 36%
 |-------|-------|-------|----------|
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 | 02-profile-data-layer | 2 | 3 min | 1.5 min |
-| 03-main-window-and-live-preview | 2 | 3 min | 1.5 min |
+| 03-main-window-and-live-preview | 3 | 23 min | 7.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 1 min, 2 min, 1 min, 1 min, 2 min
-- Trend: stable
+- Last 5 plans: 1 min, 2 min, 1 min, 1 min, 20 min
+- Trend: stable (20min plan included user verification round-trip)
 
 *Updated after each plan completion*
 
@@ -72,6 +72,9 @@ Recent decisions affecting current work:
 - [03-02]: Speed row set_sensitive(False) for Static mode — speed param irrelevant for static
 - [03-02]: _on_speed_changed guards if button.get_active() — toggled fires twice per click (deactivate + activate)
 - [03-02]: _loading guard pattern wraps all programmatic control updates to suppress signal-driven debounce
+- [Phase 03-03]: color_cycle mode disables color picker — ASUS hardware ignores RGB values; no per-color cycle control via sysfs
+- [Phase 03-03]: self._color_row as instance variable enables mode-change handler to update sensitivity and subtitle
+- [Phase 03-03]: set_size_request(40,40) on ColorDialogButton required for reliable GTK4 rendering in Adw.ActionRow suffix
 
 ### Pending Todos
 
@@ -85,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-21
-Stopped at: Completed 03-02-PLAN.md — MainWindow with mode/color/speed controls, 100ms debounce, profile load/save/delete dialogs.
+Last session: 2026-02-22
+Stopped at: Completed 03-03-PLAN.md — Phase 3 complete. Color palette presets, ColorDialogButton fix, Color Cycle mode hardware explanation UX.
 Resume file: None
