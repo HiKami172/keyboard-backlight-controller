@@ -1,8 +1,11 @@
+import os
 import sys
+import json
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
-from gi.repository import Adw
+gi.require_version('Gio', '2.0')
+from gi.repository import Adw, Gio, GLib
 
 from kbd_backlight.hardware.backlight import BacklightController, HardwareNotFoundError
 from kbd_backlight.profiles.manager import ProfileManager
@@ -12,7 +15,7 @@ class Application(Adw.Application):
     """Main application — owns BacklightController and ProfileManager.
 
     One instance lives for the full process lifetime. The window and
-    (in Phase 4) the tray both share these objects via the application.
+    the tray both share these objects via the application.
     """
 
     APPLICATION_ID = "io.github.hikami.KbdBacklight"
@@ -23,8 +26,17 @@ class Application(Adw.Application):
         self._controller: BacklightController | None = None
         self._manager: ProfileManager = ProfileManager()
         self._window = None
+        self._tray_proc = None
+        self._tray_reader = None
+        self._tray_only = '--tray-only' in sys.argv
+        self._activated_once = False
 
     def _on_activate(self, app):
+        # On re-activation (second+ launch attempt), just show the window.
+        if self._activated_once:
+            self.show_window()
+            return
+
         # Lazy-init controller so HardwareNotFoundError surfaces at activate time
         # with a user-visible error, not at import time.
         if self._controller is None:
@@ -53,8 +65,90 @@ class Application(Adw.Application):
                 manager=self._manager,
             )
 
-        self._window.present()
-        self._restore_last_profile()
+        # Hold the application alive when window is hidden (TRAY-05)
+        self.hold()
+        self._activated_once = True
+        self._start_tray()
+
+        if not self._tray_only:
+            self._window.present()
+            self._restore_last_profile()
+
+    def _start_tray(self):
+        """Launch tray.py subprocess with piped stdin/stdout."""
+        tray_script = os.path.join(os.path.dirname(__file__), 'tray.py')
+        launcher = Gio.SubprocessLauncher.new(
+            Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
+        )
+        self._tray_proc = launcher.spawnv([sys.executable, tray_script])
+        stdout = self._tray_proc.get_stdout_pipe()
+        self._tray_reader = Gio.DataInputStream.new(stdout)
+        self._tray_reader.read_line_async(
+            GLib.PRIORITY_DEFAULT, None, self._on_tray_message
+        )
+
+    def _on_tray_message(self, source, result):
+        """Handle one line from tray subprocess stdout. Requeues next read."""
+        try:
+            line, _ = source.read_line_finish_utf8(result)
+        except Exception:
+            return  # Subprocess closed or error
+        if line is None:
+            return  # Subprocess stdout closed
+        try:
+            msg = json.loads(line)
+            action = msg.get('action')
+            if action == 'select_profile':
+                self._apply_profile_by_name(msg['name'])
+            elif action == 'show':
+                self.show_window()
+            elif action == 'quit':
+                self._shutdown_tray()
+                self.release()
+                self.quit()
+        except (json.JSONDecodeError, KeyError):
+            pass
+        # Queue next read — MUST re-queue or IPC stops
+        source.read_line_async(GLib.PRIORITY_DEFAULT, None, self._on_tray_message)
+
+    def _apply_profile_by_name(self, name: str):
+        """Apply a named profile to hardware and update last_profile. Called from tray."""
+        profile = self._manager.get_profile(name)
+        if profile is None:
+            return
+        try:
+            self._controller.apply(
+                profile.mode, profile.r, profile.g, profile.b,
+                profile.speed, persist=True,  # cmd=1 — tray switch is an explicit action
+            )
+        except Exception:
+            pass
+        self._manager.set_last_profile(name)
+        # Also update MainWindow controls if window exists and is visible
+        if self._window is not None:
+            self._window.load_profile_from_tray(profile)
+
+    def _send_tray(self, message: str):
+        """Write a newline-terminated message to tray subprocess stdin."""
+        if self._tray_proc is None:
+            return
+        stdin = self._tray_proc.get_stdin_pipe()
+        if stdin is not None:
+            stdin.write_all((message + '\n').encode(), None)
+
+    def notify_tray_refresh(self):
+        """Called by MainWindow after profile save/delete to rebuild tray menu."""
+        self._send_tray('REFRESH')
+
+    def _shutdown_tray(self):
+        """Send QUIT to tray subprocess and wait for it to exit."""
+        self._send_tray('QUIT')
+        if self._tray_proc is not None:
+            try:
+                self._tray_proc.wait(None)
+            except Exception:
+                self._tray_proc.force_exit()
+            self._tray_proc = None
 
     def _restore_last_profile(self):
         """Apply last-used profile to hardware on startup (PROF-04)."""
@@ -71,6 +165,6 @@ class Application(Adw.Application):
             pass  # Hardware unavailable; don't block startup
 
     def show_window(self):
-        """Restore the main window from hidden state (called by Phase 4 tray icon)."""
+        """Restore the main window from hidden state (called by tray icon)."""
         if self._window is not None:
             self._window.present()
