@@ -80,6 +80,11 @@ class Application(Adw.Application):
         launcher = Gio.SubprocessLauncher.new(
             Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
         )
+        # GTK4's EGL/DRI initialisation may inject snap library paths into the
+        # process environment; clear them so the GTK3 subprocess doesn't pick
+        # up an incompatible libpthread from /snap/core20.
+        launcher.unsetenv('LD_LIBRARY_PATH')
+        launcher.unsetenv('LD_PRELOAD')
         self._tray_proc = launcher.spawnv([sys.executable, tray_script])
         stdout = self._tray_proc.get_stdout_pipe()
         self._tray_reader = Gio.DataInputStream.new(stdout)
