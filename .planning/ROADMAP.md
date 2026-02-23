@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Profile Data Layer** - Profile dataclass, ProfileManager CRUD, and JSON storage — no GTK dependency (completed 2026-02-21)
 - [x] **Phase 3: Main Window and Live Preview** - GTK4/libadwaita window with mode selector, color picker, speed control, and debounced live preview (completed 2026-02-22)
 - [x] **Phase 4: System Tray and Autostart** - AppIndicator3 tray with profile menu, XDG autostart, and tray-only launch mode (completed 2026-02-23)
+- [ ] **Phase 4.1: Profile Gap Closure** - Fix PROF-04 autostart restore and PROF-02 rename UI (gap closure from v1.0 audit)
 - [ ] **Phase 5: Color Tools and Keyboard Shortcuts** - Preset palettes, color harmony suggestions, gradient selector, and Wayland-compatible profile shortcuts
 
 ## Phase Details
@@ -85,6 +86,18 @@ Plans:
 - [ ] 04-02-PLAN.md — Application IPC wiring: tray subprocess launch, hold(), _apply_profile_by_name(), notify_tray_refresh(); MainWindow save/delete hooks + load_profile_from_tray()
 - [ ] 04-03-PLAN.md — XDG autostart install script + end-to-end visual verification checkpoint
 
+### Phase 4.1: Profile Gap Closure
+**Goal**: Close the two v1.0 audit gaps: restore last profile on autostart (PROF-04) and expose rename UI in MainWindow (PROF-02)
+**Depends on**: Phase 4
+**Requirements**: PROF-02, PROF-04
+**Gap Closure**: Closes gaps from v1.0 audit (GAP-1, GAP-2)
+**Success Criteria** (what must be TRUE):
+  1. Launching with `--tray-only` via XDG autostart applies the last saved profile to the keyboard at login
+  2. User can rename any profile from within the MainWindow profile list without deleting and re-creating it
+  3. `_restore_last_profile()` runs on every first activation regardless of `_tray_only` flag
+  4. Rename action is wired to `manager.rename_profile()` and reflected immediately in UI and JSON
+**Plans**: TBD
+
 ### Phase 5: Color Tools and Keyboard Shortcuts
 **Goal**: The color-picking experience is enhanced with harmony suggestions and gradient selection, and profiles are switchable via keyboard shortcuts
 **Depends on**: Phase 4
@@ -107,4 +120,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Profile Data Layer | 2/2 | Complete   | 2026-02-21 |
 | 3. Main Window and Live Preview | 3/3 | Complete   | 2026-02-22 |
 | 4. System Tray and Autostart | 3/3 | Complete   | 2026-02-23 |
+| 4.1. Profile Gap Closure | 0/TBD | Not started | - |
 | 5. Color Tools and Keyboard Shortcuts | 0/TBD | Not started | - |
