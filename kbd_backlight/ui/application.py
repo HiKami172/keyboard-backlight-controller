@@ -88,6 +88,10 @@ class Application(Adw.Application):
         launcher = Gio.SubprocessLauncher.new(
             Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
         )
+        # GTK4's EGL/DRI init adds snap paths to LD_LIBRARY_PATH. Clear it so
+        # the GTK3 tray subprocess loads libpthread from /usr/lib (not snap's
+        # incompatible core20 version) when AyatanaAppIndicator3 is instantiated.
+        launcher.unsetenv('LD_LIBRARY_PATH')
         self._tray_proc = launcher.spawnv([sys.executable, tray_script])
         # get_stdout_pipe() returns Gio.UnixInputStream on Linux.
         self._tray_stdout = self._tray_proc.get_stdout_pipe()
