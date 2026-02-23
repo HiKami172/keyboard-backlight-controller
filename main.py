@@ -7,7 +7,10 @@ from kbd_backlight.ui.application import Application
 
 def main():
     app = Application()
-    sys.exit(app.run(sys.argv))
+    # Strip --tray-only before passing argv to GLib; Application reads it
+    # directly from sys.argv before app.run() is called.
+    argv = [a for a in sys.argv if a != '--tray-only']
+    sys.exit(app.run(argv))
 
 
 if __name__ == '__main__':
