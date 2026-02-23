@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import subprocess as subproc
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -27,7 +28,7 @@ class Application(Adw.Application):
         self._manager: ProfileManager = ProfileManager()
         self._window = None
         self._tray_proc = None
-        self._tray_reader = None
+        self._tray_buf = b''
         self._tray_only = '--tray-only' in sys.argv
         self._activated_once = False
 
@@ -75,31 +76,44 @@ class Application(Adw.Application):
             self._restore_last_profile()
 
     def _start_tray(self):
-        """Launch tray.py subprocess with piped stdin/stdout."""
+        """Launch tray.py as a subprocess with piped stdin/stdout.
+
+        Uses subprocess.Popen + GLib.io_add_watch on the raw stdout fd — the
+        same pattern tray.py uses to watch its own stdin.  This avoids the
+        Gio.DataInputStream.read_line_async path which does not reliably fire
+        its callback in all PyGObject environments.
+        """
         tray_script = os.path.join(os.path.dirname(__file__), 'tray.py')
-        launcher = Gio.SubprocessLauncher.new(
-            Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
+        self._tray_proc = subproc.Popen(
+            [sys.executable, tray_script],
+            stdin=subproc.PIPE,
+            stdout=subproc.PIPE,
+            bufsize=0,  # unbuffered — each write immediately visible to reader
         )
-        # GTK4's EGL/DRI initialisation may inject snap library paths into the
-        # process environment; clear them so the GTK3 subprocess doesn't pick
-        # up an incompatible libpthread from /snap/core20.
-        launcher.unsetenv('LD_LIBRARY_PATH')
-        launcher.unsetenv('LD_PRELOAD')
-        self._tray_proc = launcher.spawnv([sys.executable, tray_script])
-        stdout = self._tray_proc.get_stdout_pipe()
-        self._tray_reader = Gio.DataInputStream.new(stdout)
-        self._tray_reader.read_line_async(
-            GLib.PRIORITY_DEFAULT, None, self._on_tray_message
+        GLib.io_add_watch(
+            self._tray_proc.stdout.fileno(),
+            GLib.IO_IN | GLib.IO_HUP,
+            self._on_tray_data,
         )
 
-    def _on_tray_message(self, source, result):
-        """Handle one line from tray subprocess stdout. Requeues next read."""
+    def _on_tray_data(self, fd, condition):
+        """Read available bytes from tray stdout and dispatch complete lines."""
+        if condition & GLib.IO_HUP:
+            return False  # Subprocess exited — deregister watcher
         try:
-            line, _ = source.read_line_finish_utf8(result)
-        except Exception:
-            return  # Subprocess closed or error
-        if line is None:
-            return  # Subprocess stdout closed
+            chunk = os.read(fd, 4096)
+        except OSError:
+            return False
+        if not chunk:
+            return False
+        self._tray_buf += chunk
+        while b'\n' in self._tray_buf:
+            line_bytes, self._tray_buf = self._tray_buf.split(b'\n', 1)
+            self._dispatch_tray_line(line_bytes.decode('utf-8', errors='replace'))
+        return True  # Keep watcher active
+
+    def _dispatch_tray_line(self, line: str):
+        """Dispatch a single decoded JSON line from the tray subprocess."""
         try:
             msg = json.loads(line)
             action = msg.get('action')
@@ -113,8 +127,6 @@ class Application(Adw.Application):
                 self.quit()
         except (json.JSONDecodeError, KeyError):
             pass
-        # Queue next read — MUST re-queue or IPC stops
-        source.read_line_async(GLib.PRIORITY_DEFAULT, None, self._on_tray_message)
 
     def _apply_profile_by_name(self, name: str):
         """Apply a named profile to hardware and update last_profile. Called from tray."""
@@ -135,11 +147,13 @@ class Application(Adw.Application):
 
     def _send_tray(self, message: str):
         """Write a newline-terminated message to tray subprocess stdin."""
-        if self._tray_proc is None:
+        if self._tray_proc is None or self._tray_proc.stdin is None:
             return
-        stdin = self._tray_proc.get_stdin_pipe()
-        if stdin is not None:
-            stdin.write_all((message + '\n').encode(), None)
+        try:
+            self._tray_proc.stdin.write((message + '\n').encode())
+            self._tray_proc.stdin.flush()
+        except OSError:
+            pass
 
     def notify_tray_refresh(self):
         """Called by MainWindow after profile save/delete to rebuild tray menu."""
@@ -150,9 +164,9 @@ class Application(Adw.Application):
         self._send_tray('QUIT')
         if self._tray_proc is not None:
             try:
-                self._tray_proc.wait(None)
-            except Exception:
-                self._tray_proc.force_exit()
+                self._tray_proc.wait(timeout=2)
+            except subproc.TimeoutExpired:
+                self._tray_proc.kill()
             self._tray_proc = None
 
     def _restore_last_profile(self):
