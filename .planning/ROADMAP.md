@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Permissions and Hardware Foundation** - udev rule + BacklightController with glob path discovery and validated sysfs writes
 - [x] **Phase 2: Profile Data Layer** - Profile dataclass, ProfileManager CRUD, and JSON storage — no GTK dependency (completed 2026-02-21)
 - [x] **Phase 3: Main Window and Live Preview** - GTK4/libadwaita window with mode selector, color picker, speed control, and debounced live preview (completed 2026-02-22)
-- [ ] **Phase 4: System Tray and Autostart** - AppIndicator3 tray with profile menu, XDG autostart, and tray-only launch mode
+- [x] **Phase 4: System Tray and Autostart** - AppIndicator3 tray with profile menu, XDG autostart, and tray-only launch mode (completed 2026-02-23)
 - [ ] **Phase 5: Color Tools and Keyboard Shortcuts** - Preset palettes, color harmony suggestions, gradient selector, and Wayland-compatible profile shortcuts
 
 ## Phase Details
@@ -106,5 +106,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Permissions and Hardware Foundation | 1/2 | In Progress|  |
 | 2. Profile Data Layer | 2/2 | Complete   | 2026-02-21 |
 | 3. Main Window and Live Preview | 3/3 | Complete   | 2026-02-22 |
-| 4. System Tray and Autostart | 2/3 | In Progress|  |
+| 4. System Tray and Autostart | 3/3 | Complete   | 2026-02-23 |
 | 5. Color Tools and Keyboard Shortcuts | 0/TBD | Not started | - |

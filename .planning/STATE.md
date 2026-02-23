@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-21)
 
 **Core value:** User can visually configure and switch keyboard backlight modes without touching the terminal — and the setting persists across reboots.
-**Current focus:** Phase 4 — Tray Icon and Background Operation
+**Current focus:** Phase 5 — Global Hotkeys
 
 ## Current Position
 
-Phase: 4 of 5 (System Tray and Autostart)
-Plan: 2 of 3 in current phase
-Status: In progress — Plan 04-02 complete
-Last activity: 2026-02-22 — Plan 04-02 complete: Gio.SubprocessLauncher async IPC wiring, app.hold() background persistence, tray-window bidirectional sync
+Phase: 4 of 5 (System Tray and Autostart) — COMPLETE
+Plan: 3 of 3 in current phase — COMPLETE
+Status: Phase 4 complete — ready for Phase 5
+Last activity: 2026-02-23 — Plan 04-03 complete: XDG autostart installer, 3 runtime bug fixes (snap libpthread, GLib.io_add_watch IPC, --tray-only argv strip), full Phase 4 human verification passed
 
-Progress: [████████░░] 62%
+Progress: [█████████░] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: 1.4 min
-- Total execution time: 11 min
+- Total plans completed: 9
+- Average duration: ~5 min
+- Total execution time: ~43 min
 
 **By Phase:**
 
@@ -30,7 +30,7 @@ Progress: [████████░░] 62%
 | 01-permissions-and-hardware-foundation | 2 | 3 min | 2 min |
 | 02-profile-data-layer | 2 | 3 min | 1.5 min |
 | 03-main-window-and-live-preview | 3 | 23 min | 7.7 min |
-| 04-system-tray-and-autostart | 2 | 2 min | 1 min |
+| 04-system-tray-and-autostart | 3 | ~32 min | ~10 min |
 
 **Recent Trend:**
 - Last 5 plans: 2 min, 1 min, 1 min, 20 min, 2 min (04-02: 2 min)
@@ -86,6 +86,10 @@ Recent decisions affecting current work:
 - [04-02]: _tray_only flag suppresses window on first activate only — re-activation ignores it
 - [04-02]: read_line_async requeued at end of _on_tray_message — caller must requeue or IPC stops after first message
 - [04-02]: release() called before quit() in quit action handler — balances the hold() from first activate
+- [04-03]: LD_PRELOAD=/lib/x86_64-linux-gnu/libpthread.so.0 injected before tray subprocess spawn — snap core20 ships soname-mismatched libpthread that crashes GTK3 imports
+- [04-03]: GLib.io_add_watch on stdin fd replaces read_line_async — async variant silently dropped messages after first receive in SubprocessLauncher context
+- [04-03]: sys.argv[:] filtered to remove --tray-only before Gtk.Application.run() — GLib option parser raises SystemExit on unrecognised flags
+- [04-03]: install-autostart.sh resolves python3 via command -v at script runtime — portable across virtualenvs and system installs
 
 ### Pending Todos
 
@@ -93,12 +97,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 4]: GNOME Shell requires `gnome-shell-extension-appindicator` for tray icons — must detect and surface user-facing error if missing
-- [Phase 4]: Confirm trayer vs. direct AppIndicator3 GObject introspection binding during Phase 4 planning
 - [Phase 5]: Wayland global hotkeys (KEYS-01, KEYS-02) — XDG Desktop Portal Global Shortcuts API not fully researched; may hit implementation constraints
 
 ## Session Continuity
 
-Last session: 2026-02-22
-Stopped at: Completed 04-02-PLAN.md — Application tray IPC wiring: Gio.SubprocessLauncher, async IPC, app.hold() background persistence, tray-window bidirectional sync.
+Last session: 2026-02-23
+Stopped at: Completed 04-03-PLAN.md — XDG autostart installer, 3 runtime bug fixes (snap libpthread, GLib.io_add_watch, argv strip), full Phase 4 human verification passed. Phase 4 complete.
 Resume file: None
