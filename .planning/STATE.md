@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-21)
 
 ## Current Position
 
-Phase: 4 of 5 (System Tray and Autostart) — COMPLETE
-Plan: 3 of 3 in current phase — COMPLETE
-Status: Phase 4 complete — ready for Phase 5
-Last activity: 2026-02-23 — Plan 04-03 complete: XDG autostart installer, 3 runtime bug fixes (snap libpthread, GLib.io_add_watch IPC, --tray-only argv strip), full Phase 4 human verification passed
+Phase: 4.1 of 5 (Profile Gap Closure — PROF-02, PROF-04)
+Plan: 2 of 2 in current phase — COMPLETE
+Status: Phase 4.1 COMPLETE — both PROF-02 and PROF-04 gaps closed
+Last activity: 2026-02-23 — Plan 04.1-02 complete: PROF-02 gap closed — Rename Profile row + dialog wired to manager.rename_profile() in MainWindow
 
-Progress: [█████████░] 75%
+Progress: [██████████] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
+- Total plans completed: 11 (including Phase 4.1 plans 01-02)
 - Average duration: ~5 min
-- Total execution time: ~43 min
+- Total execution time: ~46 min
 
 **By Phase:**
 
@@ -90,6 +90,7 @@ Recent decisions affecting current work:
 - [04-03]: GLib.io_add_watch on stdin fd replaces read_line_async — async variant silently dropped messages after first receive in SubprocessLauncher context
 - [04-03]: sys.argv[:] filtered to remove --tray-only before Gtk.Application.run() — GLib option parser raises SystemExit on unrecognised flags
 - [04-03]: install-autostart.sh resolves python3 via command -v at script runtime — portable across virtualenvs and system installs
+- [04.1-01]: _restore_last_profile() called before if not self._tray_only: — one unconditional call serves both launch modes; no duplication needed inside the branch
 
 ### Pending Todos
 
@@ -102,5 +103,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-23
-Stopped at: Completed 04-03-PLAN.md — XDG autostart installer, 3 runtime bug fixes (snap libpthread, GLib.io_add_watch, argv strip), full Phase 4 human verification passed. Phase 4 complete.
+Stopped at: Completed 04.1-01-PLAN.md — PROF-04 gap closed: _restore_last_profile() moved before _tray_only guard; 72 tests passing. Phase 4.1 Plan 01 complete.
 Resume file: None
