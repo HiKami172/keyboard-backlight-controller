@@ -96,7 +96,11 @@ Plans:
   2. User can rename any profile from within the MainWindow profile list without deleting and re-creating it
   3. `_restore_last_profile()` runs on every first activation regardless of `_tray_only` flag
   4. Rename action is wired to `manager.rename_profile()` and reflected immediately in UI and JSON
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Fix PROF-04: move _restore_last_profile() before _tray_only guard in application.py
+- [ ] 04.1-02-PLAN.md — Fix PROF-02: add Rename UI row + dialog + handler to MainWindow window.py
 
 ### Phase 5: Color Tools and Keyboard Shortcuts
 **Goal**: The color-picking experience is enhanced with harmony suggestions and gradient selection, and profiles are switchable via keyboard shortcuts
