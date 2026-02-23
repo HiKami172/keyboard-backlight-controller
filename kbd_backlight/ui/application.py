@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import subprocess as subproc
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
@@ -28,6 +27,7 @@ class Application(Adw.Application):
         self._manager: ProfileManager = ProfileManager()
         self._window = None
         self._tray_proc = None
+        self._tray_stdout = None
         self._tray_buf = b''
         self._tray_only = '--tray-only' in sys.argv
         self._activated_once = False
@@ -76,22 +76,23 @@ class Application(Adw.Application):
             self._restore_last_profile()
 
     def _start_tray(self):
-        """Launch tray.py as a subprocess with piped stdin/stdout.
+        """Launch tray.py subprocess with piped stdin/stdout.
 
-        Uses subprocess.Popen + GLib.io_add_watch on the raw stdout fd — the
-        same pattern tray.py uses to watch its own stdin.  This avoids the
-        Gio.DataInputStream.read_line_async path which does not reliably fire
-        its callback in all PyGObject environments.
+        Uses Gio.SubprocessLauncher to spawn the process (required for the
+        AppIndicator3 D-Bus registration to succeed in a GNOME session), then
+        watches the stdout fd with GLib.io_add_watch for reliable line
+        delivery — avoids Gio.DataInputStream.read_line_async which does not
+        reliably fire its callback in all PyGObject environments.
         """
         tray_script = os.path.join(os.path.dirname(__file__), 'tray.py')
-        self._tray_proc = subproc.Popen(
-            [sys.executable, tray_script],
-            stdin=subproc.PIPE,
-            stdout=subproc.PIPE,
-            bufsize=0,  # unbuffered — each write immediately visible to reader
+        launcher = Gio.SubprocessLauncher.new(
+            Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
         )
+        self._tray_proc = launcher.spawnv([sys.executable, tray_script])
+        # get_stdout_pipe() returns Gio.UnixInputStream on Linux.
+        self._tray_stdout = self._tray_proc.get_stdout_pipe()
         GLib.io_add_watch(
-            self._tray_proc.stdout.fileno(),
+            self._tray_stdout.get_fd(),
             GLib.IO_IN | GLib.IO_HUP,
             self._on_tray_data,
         )
@@ -147,13 +148,14 @@ class Application(Adw.Application):
 
     def _send_tray(self, message: str):
         """Write a newline-terminated message to tray subprocess stdin."""
-        if self._tray_proc is None or self._tray_proc.stdin is None:
+        if self._tray_proc is None:
             return
-        try:
-            self._tray_proc.stdin.write((message + '\n').encode())
-            self._tray_proc.stdin.flush()
-        except OSError:
-            pass
+        stdin = self._tray_proc.get_stdin_pipe()
+        if stdin is not None:
+            try:
+                stdin.write_all((message + '\n').encode(), None)
+            except Exception:
+                pass
 
     def notify_tray_refresh(self):
         """Called by MainWindow after profile save/delete to rebuild tray menu."""
@@ -164,9 +166,9 @@ class Application(Adw.Application):
         self._send_tray('QUIT')
         if self._tray_proc is not None:
             try:
-                self._tray_proc.wait(timeout=2)
-            except subproc.TimeoutExpired:
-                self._tray_proc.kill()
+                self._tray_proc.wait(None)
+            except Exception:
+                self._tray_proc.force_exit()
             self._tray_proc = None
 
     def _restore_last_profile(self):
