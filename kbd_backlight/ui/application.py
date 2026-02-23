@@ -71,9 +71,9 @@ class Application(Adw.Application):
         self._activated_once = True
         self._start_tray()
 
+        self._restore_last_profile()   # PROF-04: always restore on first activation
         if not self._tray_only:
             self._window.present()
-            self._restore_last_profile()
 
     def _start_tray(self):
         """Launch tray.py subprocess with piped stdin/stdout.
