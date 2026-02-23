@@ -88,9 +88,14 @@ class Application(Adw.Application):
         launcher = Gio.SubprocessLauncher.new(
             Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
         )
-        # GTK4's EGL/DRI init adds snap paths to LD_LIBRARY_PATH. Clear it so
-        # the GTK3 tray subprocess loads libpthread from /usr/lib (not snap's
-        # incompatible core20 version) when AyatanaAppIndicator3 is instantiated.
+        # Preload the system libpthread.so.0 so the dynamic linker reuses it
+        # rather than loading snap core20's incompatible version (which is missing
+        # __libc_pthread_init on glibc 2.34+).  The snap version arrives via
+        # some snap-installed GTK3 theme or plugin RPATH even when
+        # LD_LIBRARY_PATH is cleared.
+        launcher.setenv(
+            'LD_PRELOAD', '/lib/x86_64-linux-gnu/libpthread.so.0', True
+        )
         launcher.unsetenv('LD_LIBRARY_PATH')
         self._tray_proc = launcher.spawnv([sys.executable, tray_script])
         # get_stdout_pipe() returns Gio.UnixInputStream on Linux.
