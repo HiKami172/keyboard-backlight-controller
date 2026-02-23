@@ -228,6 +228,16 @@ class MainWindow(Adw.ApplicationWindow):
         save_row.add_suffix(save_btn)
         group.add(save_row)
 
+        # Rename button row
+        rename_row = Adw.ActionRow()
+        rename_row.set_title('Rename Profile')
+        rename_row.set_subtitle('Change the name of the selected profile')
+        rename_btn = Gtk.Button(label='Rename…')
+        rename_btn.set_valign(Gtk.Align.CENTER)
+        rename_btn.connect('clicked', self._on_rename_clicked)
+        rename_row.add_suffix(rename_btn)
+        group.add(rename_row)
+
         # Delete button row
         delete_row = Adw.ActionRow()
         delete_row.set_title('Delete Profile')
@@ -288,6 +298,69 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_save_clicked(self, _btn):
         self._show_save_dialog()
+
+    def _on_rename_clicked(self, _btn):
+        idx = self._profile_row.get_selected()
+        if idx == Gtk.INVALID_LIST_POSITION:
+            return
+        names = self._manager.list_profiles()
+        if not names or idx >= len(names):
+            return
+        old_name = names[idx]
+        self._show_rename_dialog(old_name)
+
+    def _show_rename_dialog(self, old_name: str):
+        """Show Adw.Dialog pre-populated with old_name for profile rename input."""
+        dialog = Adw.Dialog.new()
+        dialog.set_title('Rename Profile')
+        dialog.set_content_width(360)
+
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        box.set_margin_top(12)
+        box.set_margin_bottom(12)
+        box.set_margin_start(12)
+        box.set_margin_end(12)
+
+        entry = Adw.EntryRow.new()
+        entry.set_title('New Name')
+        entry.set_text(old_name)  # pre-populate so user only edits the diff
+        box.append(entry)
+
+        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        button_box.set_halign(Gtk.Align.END)
+        cancel_btn = Gtk.Button(label='Cancel')
+        rename_btn = Gtk.Button(label='Rename')
+        rename_btn.add_css_class('suggested-action')
+        cancel_btn.connect('clicked', lambda _: dialog.close())
+        rename_btn.connect('clicked', lambda _: self._do_rename(old_name, entry.get_text(), dialog))
+        button_box.append(cancel_btn)
+        button_box.append(rename_btn)
+        box.append(button_box)
+
+        dialog.set_child(box)
+        dialog.present(self)
+
+    def _do_rename(self, old_name: str, new_name: str, dialog):
+        new_name = new_name.strip()
+        if not new_name or new_name == old_name:
+            dialog.close()
+            return
+        try:
+            self._manager.rename_profile(old_name, new_name)
+        except ValueError:
+            # Collision: new_name already exists — show toast, keep dialog open
+            self._toast_overlay.add_toast(
+                Adw.Toast.new(f'A profile named "{new_name}" already exists')
+            )
+            return  # DO NOT close dialog — user must correct the name
+        except KeyError:
+            # old_name not found — should not happen in normal flow; close silently
+            dialog.close()
+            return
+        self._refresh_profile_list()
+        self.get_application().notify_tray_refresh()
+        self._toast_overlay.add_toast(Adw.Toast.new(f'Renamed to "{new_name}"'))
+        dialog.close()
 
     def _show_save_dialog(self):
         """Show Adw.Dialog with EntryRow for profile name input."""
