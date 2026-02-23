@@ -23,7 +23,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Profiles
 
 - [x] **PROF-01**: User can create named profiles with mode, color, and speed settings
-- [ ] **PROF-02**: User can save, rename, and delete profiles
+- [x] **PROF-02**: User can save, rename, and delete profiles
 - [x] **PROF-03**: Profiles stored as JSON in ~/.config/kbd-backlight/
 - [x] **PROF-04**: Last used profile auto-restores on app launch
 
@@ -89,7 +89,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CTRL-04 | Phase 1: Permissions and Hardware Foundation | Complete |
 | CTRL-05 | Phase 1: Permissions and Hardware Foundation | Complete |
 | PROF-01 | Phase 2: Profile Data Layer | Complete |
-| PROF-02 | Phase 4.1: Profile Gap Closure | Pending |
+| PROF-02 | Phase 4.1: Profile Gap Closure | Complete |
 | PROF-03 | Phase 2: Profile Data Layer | Complete |
 | PROF-04 | Phase 4.1: Profile Gap Closure | Complete |
 | WIND-01 | Phase 3: Main Window and Live Preview | Complete |

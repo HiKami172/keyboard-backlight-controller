@@ -91,6 +91,9 @@ Recent decisions affecting current work:
 - [04-03]: sys.argv[:] filtered to remove --tray-only before Gtk.Application.run() — GLib option parser raises SystemExit on unrecognised flags
 - [04-03]: install-autostart.sh resolves python3 via command -v at script runtime — portable across virtualenvs and system installs
 - [04.1-01]: _restore_last_profile() called before if not self._tray_only: — one unconditional call serves both launch modes; no duplication needed inside the branch
+- [04.1-02]: _do_rename does NOT call dialog.close() inside except ValueError — dialog stays open so user corrects name without re-opening
+- [04.1-02]: entry.set_text(old_name) mandatory in _show_rename_dialog — user edits the diff, not retyped from scratch
+- [04.1-02]: Rename row placed between Save and Delete — ascending destructiveness order
 
 ### Pending Todos
 
@@ -103,5 +106,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-23
-Stopped at: Completed 04.1-01-PLAN.md — PROF-04 gap closed: _restore_last_profile() moved before _tray_only guard; 72 tests passing. Phase 4.1 Plan 01 complete.
+Stopped at: Completed 04.1-02-PLAN.md — PROF-02 gap closed: Rename Profile row + Adw.Dialog wired to manager.rename_profile() in MainWindow; 72 tests passing. Phase 4.1 COMPLETE.
 Resume file: None
